@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Tọa Độ Định Tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        apple: { light: '#f5f5f7', dark: '#1d1d1f', blue: '#0066cc', blueHover: '#0077ed' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-apple-light text-apple-dark h-screen flex items-center justify-center antialiased">
+
+    <div class="apple-card bg-white p-10 rounded-[2rem] w-full max-w-md mx-4 shadow-xl fade-in-up">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2">Đăng nhập</h1>
+            <p class="text-gray-500 text-sm">Sử dụng tài khoản Tọa Độ Định Tính của bạn.</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <input type="email" id="email" placeholder="Email" required
+                    class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-apple-blue/50 focus:border-apple-blue transition-all">
+            </div>
+            <div>
+                <input type="password" id="password" placeholder="Mật khẩu" required
+                    class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-apple-blue/50 focus:border-apple-blue transition-all">
+            </div>
+            
+            <div id="errorMessage" class="text-red-500 text-sm hidden text-center"></div>
+
+            <button type="submit" id="loginBtn"
+                class="w-full bg-apple-blue text-white font-medium py-3.5 rounded-xl hover:bg-apple-blueHover transition-colors flex justify-center items-center">
+                <span>Đăng nhập</span>
+                <svg id="loginSpinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center text-sm text-gray-500">
+            <a href="index.html" class="hover:text-apple-blue transition">← Quay lại trang chủ</a>
+        </div>
+    </div>
+
+    <!-- Nhúng script auth (Dùng type="module" vì ta có dùng import/export) -->
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

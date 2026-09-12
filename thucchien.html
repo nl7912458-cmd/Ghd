@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực chiến - Tọa Độ Định Tính</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { apple: { light: '#f5f5f7', dark: '#1d1d1f', blue: '#0066cc', red: '#ff3b30' } } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-apple-light text-apple-dark antialiased">
+
+    <!-- Navbar mặc định -->
+    <nav id="mainNav" class="fixed w-full z-50 glass-nav transition-all">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="font-bold text-xl tracking-tight">Tọa Độ Định Tính</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Trang chủ</a>
+                    <a href="kienthuc.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Kiến thức</a>
+                    <a href="thucchien.html" class="text-sm font-medium text-apple-blue">Thực chiến</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Thanh đếm ngược (Sticky Timer) - Mặc định ẩn -->
+    <div id="timerBar" class="hidden fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 py-3 shadow-sm transition-colors duration-300">
+        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+            <span id="examTitle" class="font-semibold text-sm truncate">Đang tải...</span>
+            <div class="flex items-center space-x-2 bg-gray-100 px-3 py-1.5 rounded-full">
+                <svg class="w-4 h-4 text-gray-500 timer-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="timeDisplay" class="font-mono font-bold text-lg tracking-wider">60:00</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="pt-24 pb-24 px-4 mx-auto max-w-4xl">
+        <!-- Màn hình 1: Danh sách Đề thi -->
+        <div id="examListView" class="fade-in-up">
+            <h2 class="text-3xl font-bold mb-8">Danh sách Đề thực chiến</h2>
+            <div id="examGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Javascript sẽ render danh sách đề vào đây -->
+            </div>
+        </div>
+
+        <!-- Màn hình 2: Khu vực làm bài -->
+        <div id="examDetailView" class="hidden fade-in-up pt-4">
+            
+            <!-- Vùng hiển thị điểm số (Ẩn lúc đang thi) -->
+            <div id="resultBox" class="hidden mb-8 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm text-center">
+                <h3 class="text-xl font-medium text-gray-500 mb-2">Kết quả của bạn</h3>
+                <div id="scoreDisplay" class="text-5xl font-bold text-apple-blue">0/0</div>
+                <button id="backToListBtn" class="mt-6 text-sm text-gray-500 hover:text-apple-blue">← Quay lại danh sách</button>
+            </div>
+
+            <!-- Vùng chứa câu hỏi -->
+            <form id="quizForm" class="space-y-8">
+                <div id="questionsContainer" class="space-y-8">
+                    <!-- Câu hỏi đổ vào đây -->
+                </div>
+                
+                <div class="pt-8 border-t border-gray-200 flex justify-center">
+                    <button type="submit" id="submitBtn" class="bg-apple-blue text-white font-medium px-10 py-4 rounded-full hover:bg-blue-600 transition shadow-lg hover:shadow-xl text-lg w-full md:w-auto">
+                        Nộp bài
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/thucchien.js"></script>
+</body>
+</html>

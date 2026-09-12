@@ -8,62 +8,77 @@ const passwordInput = document.getElementById('password');
 const errorMessage = document.getElementById('errorMessage');
 const loginBtn = document.getElementById('loginBtn');
 const loginSpinner = document.getElementById('loginSpinner');
+const globalLoader = document.getElementById('globalLoader');
 
-// ĐẶT CỨNG TÊN THƯ MỤC CỦA BẠN TRÊN GITHUB Ở ĐÂY
-const REPO_NAME = '/Ghd/'; 
-
-function getRedirectUrl(page) {
-    // Luôn luôn ghép chữ /Ghd/ vào trước tên trang
-    return REPO_NAME + page;
+// Hàm lấy đúng đường dẫn tương đối dựa trên vị trí hiện tại của file HTML
+function getRelativePath(targetPage) {
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(Boolean);
+    // Nếu đang ở thư mục con (như /Ghd/), các file cùng cấp chỉ cần gọi tên file trực tiếp
+    return targetPage;
 }
 
-// 1. Xử lý logic khi bấm nút Đăng nhập
+// 1. Xử lý đăng nhập
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         loginBtn.disabled = true;
-        loginSpinner.classList.remove('hidden');
-        errorMessage.classList.add('hidden');
+        if (loginSpinner) loginSpinner.classList.remove('hidden');
+        if (errorMessage) errorMessage.classList.add('hidden');
 
         try {
             await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-            // Đăng nhập thành công, CHẮC CHẮN chuyển về /Ghd/index.html
-            window.location.href = getRedirectUrl('index.html');
+            window.location.href = getRelativePath('index.html');
         } catch (error) {
-            errorMessage.textContent = "Sai email hoặc mật khẩu. Vui lòng thử lại!";
-            errorMessage.classList.remove('hidden');
+            if (errorMessage) {
+                errorMessage.textContent = "Sai email hoặc mật khẩu. Vui lòng thử lại!";
+                errorMessage.classList.remove('hidden');
+            }
         } finally {
             loginBtn.disabled = false;
-            loginSpinner.classList.add('hidden');
+            if (loginSpinner) loginSpinner.classList.add('hidden');
         }
     });
 }
 
-// 2. Kiểm tra trạng thái đăng nhập
+// 2. Kiểm tra trạng thái đăng nhập toàn cục và ẩn màn hình loading mờ
 const currentFileName = window.location.pathname.split('/').pop() || 'index.html';
 const protectedPages = ['kienthuc.html', 'thucchien.html']; 
 
 onAuthStateChanged(auth, (user) => {
+    const authActionBtn = document.getElementById('authActionBtn');
+
     if (user) {
         if (currentFileName === 'login.html') {
-            window.location.href = getRedirectUrl('index.html');
+            window.location.href = getRelativePath('index.html');
+            return;
         }
         
-        const loginNavBtn = document.querySelector('nav a[href="./login.html"]');
-        if (loginNavBtn) {
-            loginNavBtn.textContent = 'Đăng xuất';
-            loginNavBtn.href = '#';
-            loginNavBtn.addEventListener('click', (e) => {
+        // Đổi nút thành Đăng xuất
+        if (authActionBtn) {
+            authActionBtn.textContent = 'Đăng xuất';
+            authActionBtn.href = '#';
+            authActionBtn.onclick = (e) => {
                 e.preventDefault();
                 signOut(auth).then(() => {
-                    window.location.href = getRedirectUrl('login.html');
+                    window.location.href = getRelativePath('login.html');
                 });
-            });
+            };
         }
     } else {
         if (protectedPages.includes(currentFileName)) {
-            window.location.href = getRedirectUrl('login.html');
+            window.location.href = getRelativePath('login.html');
+            return;
         }
+        
+        if (authActionBtn) {
+            authActionBtn.textContent = 'Đăng nhập';
+            authActionBtn.href = getRelativePath('login.html');
+        }
+    }
+
+    // Tắt màn hình loading mờ (tránh nháy giao diện)
+    if (globalLoader) {
+        globalLoader.classList.add('hidden');
     }
 });

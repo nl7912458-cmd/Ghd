@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tọa Độ Định Tính - Nền tảng học tập</title>
     
-    <!-- Tích hợp Tailwind CSS qua CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Cấu hình Font chữ và style của Tailwind để chuẩn Apple Style -->
     <script>
         tailwind.config = {
             theme: {
@@ -28,32 +25,29 @@
             }
         }
     </script>
-
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Đã thêm ./ -->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body class="bg-apple-light text-apple-dark antialiased selection:bg-apple-blue selection:text-white">
 
-    <!-- Thanh điều hướng (Navbar) với hiệu ứng kính mờ (Glassmorphism) -->
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
+                <!-- Đã thêm ./ -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer">
-                    <span class="font-bold text-xl tracking-tight">Tọa Độ Định Tính</span>
+                    <a href="./index.html" class="font-bold text-xl tracking-tight">Tọa Độ Định Tính</a>
                 </div>
-                <!-- Menu -->
+                <!-- Đã thêm ./ -->
                 <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-sm font-medium hover:text-apple-blue transition">Trang chủ</a>
-                    <a href="kienthuc.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Kiến thức</a>
-                    <a href="thucchien.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Thực chiến</a>
+                    <a href="./index.html" class="text-sm font-medium hover:text-apple-blue transition">Trang chủ</a>
+                    <a href="./kienthuc.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Kiến thức</a>
+                    <a href="./thucchien.html" class="text-sm font-medium text-gray-500 hover:text-apple-blue transition">Thực chiến</a>
                 </div>
-                <!-- Nút Đăng nhập -->
+                <!-- Đã thêm ./ -->
                 <div>
-                    <a href="login.html" class="text-sm font-medium bg-apple-dark text-white px-5 py-2 rounded-full hover:bg-gray-800 transition shadow-sm hover:shadow-md">
+                    <a href="./login.html" class="text-sm font-medium bg-apple-dark text-white px-5 py-2 rounded-full hover:bg-gray-800 transition shadow-sm hover:shadow-md">
                         Đăng nhập
                     </a>
                 </div>
@@ -61,7 +55,6 @@
         </div>
     </nav>
 
-    <!-- Phần Giới thiệu (Hero Section) -->
     <main class="pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pb-32 px-4 mx-auto max-w-6xl text-center">
         <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6 fade-in-up">
             Tư duy sắc bén.<br>
@@ -73,19 +66,18 @@
             Hệ thống hóa kiến thức từ dao động cơ, vòng tròn lượng giác đến các bài toán tối ưu hàm số một cách trực quan nhất. Rèn luyện tư duy với áp lực thời gian thực.
         </p>
         <div class="mt-10 flex justify-center gap-4 fade-in-up delay-200">
-            <a href="kienthuc.html" class="bg-apple-blue text-white font-medium px-8 py-3.5 rounded-full hover:bg-apple-blueHover transition shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform duration-200">
+            <!-- Đã thêm ./ -->
+            <a href="./kienthuc.html" class="bg-apple-blue text-white font-medium px-8 py-3.5 rounded-full hover:bg-apple-blueHover transition shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform duration-200">
                 Khám phá lý thuyết
             </a>
-            <a href="thucchien.html" class="bg-white text-apple-dark font-medium px-8 py-3.5 rounded-full hover:bg-gray-50 transition shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transform duration-200">
+            <a href="./thucchien.html" class="bg-white text-apple-dark font-medium px-8 py-3.5 rounded-full hover:bg-gray-50 transition shadow-sm border border-gray-200 hover:shadow-md hover:-translate-y-0.5 transform duration-200">
                 Thi thử 60 phút
             </a>
         </div>
     </main>
 
-    <!-- Các tính năng nổi bật (Cards) -->
     <section class="max-w-6xl mx-auto px-4 pb-24">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Card 1 -->
             <div class="apple-card p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
                 <div class="w-12 h-12 bg-blue-100 text-apple-blue rounded-2xl flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
@@ -96,7 +88,6 @@
                 </p>
             </div>
             
-            <!-- Card 2 -->
             <div class="apple-card p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
                 <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -108,6 +99,6 @@
             </div>
         </div>
     </section>
-
 </body>
 </html>
+

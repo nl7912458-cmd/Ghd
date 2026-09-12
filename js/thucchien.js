@@ -11,7 +11,6 @@ const resultBox = document.getElementById('resultBox');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const backToListBtn = document.getElementById('backToListBtn');
 
-// Các phần tử liên quan đến Timer
 const mainNav = document.getElementById('mainNav');
 const timerBar = document.getElementById('timerBar');
 const timeDisplay = document.getElementById('timeDisplay');
@@ -20,10 +19,10 @@ const timerIcon = document.querySelector('.timer-icon');
 
 let currentExamData = [];
 let timerInterval;
-let timeLeft = 0; // Tính bằng giây
+let timeLeft = 0;
 
-// 1. Render danh sách đề thi
 function renderExamList() {
+    if (!examGrid) return;
     examGrid.innerHTML = '';
     listDeThi.forEach(exam => {
         const card = document.createElement('div');
@@ -42,46 +41,44 @@ function renderExamList() {
     });
 }
 
-// 2. Bắt đầu bài thi
 async function startExam(examInfo) {
     try {
-        const module = await import(\`../data/\${examInfo.id}.js\`);
+        // ĐÃ SỬA: Sửa lỗi cú pháp dynamic import
+        const module = await import(`../data/${examInfo.id}.js`);
         currentExamData = module.examData;
         
-        // Chuyển đổi giao diện
         examListView.classList.add('hidden');
         examDetailView.classList.remove('hidden');
         resultBox.classList.add('hidden');
-        quizForm.classList.remove('hidden');
-        submitBtn.classList.remove('hidden');
+        if (quizForm) quizForm.reset();
+        if (submitBtn) submitBtn.classList.remove('hidden');
         
-        // Hiện thanh Timer, ẩn thanh Nav mặc định
-        mainNav.classList.add('hidden');
-        timerBar.classList.remove('hidden');
-        examTitleDisplay.textContent = examInfo.title;
+        if (mainNav) mainNav.classList.add('hidden');
+        if (timerBar) timerBar.classList.remove('hidden');
+        if (examTitleDisplay) examTitleDisplay.textContent = examInfo.title;
         
-        // Render câu hỏi
         renderQuestions();
         
-        // Bắt đầu đếm ngược (examInfo.time là phút)
         timeLeft = examInfo.time * 60; 
         updateTimerDisplay();
         clearInterval(timerInterval);
         timerInterval = setInterval(handleTimer, 1000);
         
-        // Reset giao diện Timer về bình thường
-        timerBar.classList.remove('bg-red-500', 'text-white');
-        timerBar.classList.add('bg-white/90');
-        timeDisplay.classList.remove('text-white');
-        timerIcon.classList.remove('text-white');
+        if (timerBar) {
+            timerBar.classList.remove('bg-red-500', 'text-white');
+            timerBar.classList.add('bg-white/90');
+        }
+        if (timeDisplay) timeDisplay.classList.remove('text-white');
+        if (timerIcon) timerIcon.classList.remove('text-white');
         
     } catch (error) {
+        console.error(error);
         alert("Đề thi này đang được cập nhật!");
     }
 }
 
-// 3. Render các câu hỏi ra form
 function renderQuestions() {
+    if (!questionsContainer) return;
     questionsContainer.innerHTML = '';
     currentExamData.forEach((q, index) => {
         const qDiv = document.createElement('div');
@@ -106,39 +103,36 @@ function renderQuestions() {
     });
 }
 
-// 4. Xử lý đồng hồ đếm ngược
 function handleTimer() {
     timeLeft--;
     updateTimerDisplay();
     
-    // Đổi màu đỏ khi còn dưới 5 phút (300 giây)
-    if (timeLeft === 300) {
+    if (timeLeft === 300 && timerBar) {
         timerBar.classList.remove('bg-white/90');
         timerBar.classList.add('bg-red-500', 'text-white');
-        timeDisplay.classList.add('text-white');
-        timerIcon.classList.add('text-white');
+        if (timeDisplay) timeDisplay.classList.add('text-white');
+        if (timerIcon) timerIcon.classList.add('text-white');
     }
     
     if (timeLeft <= 0) {
         clearInterval(timerInterval);
-        submitExam(); // Tự động nộp
+        submitExam();
     }
 }
 
 function updateTimerDisplay() {
+    if (!timeDisplay) return;
     const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
     const s = (timeLeft % 60).toString().padStart(2, '0');
     timeDisplay.textContent = `${m}:${s}`;
 }
 
-// 5. Chấm điểm & Nộp bài
 function submitExam() {
     clearInterval(timerInterval);
     
-    // Ẩn thanh Timer, hiện lại Nav
-    timerBar.classList.add('hidden');
-    mainNav.classList.remove('hidden');
-    submitBtn.classList.add('hidden'); // Ẩn nút nộp
+    if (timerBar) timerBar.classList.add('hidden');
+    if (mainNav) mainNav.classList.remove('hidden');
+    if (submitBtn) submitBtn.classList.add('hidden');
     
     let score = 0;
     const total = currentExamData.length;
@@ -147,52 +141,46 @@ function submitExam() {
     currentExamData.forEach((q, index) => {
         const userAnswer = formData.get(`question_${index}`);
         const qBlock = document.getElementById(`q-block-${index}`);
-        const inputs = qBlock.querySelectorAll('input[type="radio"]');
+        if (!qBlock) return;
         
-        // Vô hiệu hóa việc chọn lại
+        const inputs = qBlock.querySelectorAll('input[type="radio"]');
         inputs.forEach(input => input.disabled = true);
 
         if (userAnswer === q.correctAnswer) {
             score++;
-            // Bôi xanh đáp án đúng mà user chọn
             if(userAnswer) {
                 const checkedLabel = qBlock.querySelector(`input[value="${userAnswer}"]`).parentElement;
-                checkedLabel.classList.add('bg-green-50', 'border-green-400');
+                if (checkedLabel) checkedLabel.classList.add('bg-green-50', 'border-green-400');
             }
         } else {
-            // Bôi đỏ đáp án user chọn sai
             if (userAnswer) {
                 const checkedLabel = qBlock.querySelector(`input[value="${userAnswer}"]`).parentElement;
-                checkedLabel.classList.add('bg-red-50', 'border-red-400');
+                if (checkedLabel) checkedLabel.classList.add('bg-red-50', 'border-red-400');
             }
-            // Khoanh xanh đáp án đúng để user biết
             const correctLabel = qBlock.querySelector(`input[value="${q.correctAnswer}"]`).parentElement;
-            correctLabel.classList.add('bg-green-50', 'border-green-400', 'ring-1', 'ring-green-400');
+            if (correctLabel) correctLabel.classList.add('bg-green-50', 'border-green-400', 'ring-1', 'ring-green-400');
         }
     });
 
-    // Hiện điểm
-    resultBox.classList.remove('hidden');
-    scoreDisplay.textContent = `${score}/${total}`;
-    
-    // Tự động cuộn lên xem điểm
+    if (resultBox) resultBox.classList.remove('hidden');
+    if (scoreDisplay) scoreDisplay.textContent = `${score}/${total}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Bắt sự kiện nộp bài tay
-quizForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if(confirm("Bạn có chắc chắn muốn nộp bài?")) {
-        submitExam();
-    }
-});
+if (quizForm) {
+    quizForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if(confirm("Bạn có chắc chắn muốn nộp bài?")) {
+            submitExam();
+        }
+    });
+}
 
-// Nút quay lại danh sách
-backToListBtn.addEventListener('click', () => {
-    examDetailView.classList.add('hidden');
-    examListView.classList.remove('hidden');
-});
+if (backToListBtn) {
+    backToListBtn.addEventListener('click', () => {
+        examDetailView.classList.add('hidden');
+        examListView.classList.remove('hidden');
+    });
+}
 
-// Khởi chạy
 renderExamList();
-

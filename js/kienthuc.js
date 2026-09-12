@@ -10,8 +10,8 @@ const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 
 let currentDocTitle = 'TaiLieu';
 
-// 1. Render danh sách tài liệu
 function renderList() {
+    if (!documentGrid) return;
     documentGrid.innerHTML = '';
     listTaiLieu.forEach(doc => {
         const card = document.createElement('div');
@@ -21,56 +21,50 @@ function renderList() {
             <h3 class="text-xl font-bold mb-3 text-apple-dark">${doc.title}</h3>
             <p class="text-gray-500 text-sm flex-grow">${doc.description}</p>
         `;
-        
-        // Sự kiện click để mở chi tiết
         card.addEventListener('click', () => loadDocument(doc.id, doc.title));
         documentGrid.appendChild(card);
     });
 }
 
-// 2. Mở nội dung tài liệu
 async function loadDocument(id, title) {
     try {
-        // Import file data động (dynamic import) dựa vào id
-        const module = await import(\`../data/\${id}.js\`);
+        // ĐÃ SỬA: Sửa lỗi cú pháp string interpolation trong dynamic import
+        const module = await import(`../data/${id}.js`);
         pdfContent.innerHTML = module.content;
         currentDocTitle = title;
         
-        // Chuyển giao diện
         listView.classList.add('hidden');
         detailView.classList.remove('hidden');
     } catch (error) {
+        console.error(error);
         alert("Nội dung bài học này đang được cập nhật!");
     }
 }
 
-// 3. Nút quay lại
-backBtn.addEventListener('click', () => {
-    detailView.classList.add('hidden');
-    listView.classList.remove('hidden');
-    pdfContent.innerHTML = '';
-});
-
-// 4. Xử lý xuất PDF chuẩn A4
-downloadPdfBtn.addEventListener('click', () => {
-    // Tạm ẩn nút tải trong lúc chụp ảnh web
-    downloadPdfBtn.classList.add('hidden'); 
-    
-    const element = document.getElementById('pdfContent');
-    const opt = {
-        margin:       15,
-        filename:     `${currentDocTitle}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    // Tạo PDF, sau đó hiện lại nút tải
-    html2pdf().set(opt).from(element).save().then(() => {
-        downloadPdfBtn.classList.remove('hidden');
+if (backBtn) {
+    backBtn.addEventListener('click', () => {
+        detailView.classList.add('hidden');
+        listView.classList.remove('hidden');
+        pdfContent.innerHTML = '';
     });
-});
+}
 
-// Chạy hàm render khi web tải xong
+if (downloadPdfBtn) {
+    downloadPdfBtn.addEventListener('click', () => {
+        downloadPdfBtn.classList.add('hidden'); 
+        const element = document.getElementById('pdfContent');
+        const opt = {
+            margin:       15,
+            filename:     `${currentDocTitle}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            downloadPdfBtn.classList.remove('hidden');
+        });
+    });
+}
+
 renderList();
-
